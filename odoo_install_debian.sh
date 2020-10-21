@@ -114,7 +114,8 @@ echo -e "\n---- Install python packages/requirements ----"
 # Is not adviced to use sudo with pip to alter system packages. See:
 # What are the risks of running 'sudo pip'?
 # https://stackoverflow.com/questions/21055859/what-are-the-risks-of-running-sudo-pip
-pip install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt
+sudo su $OE_USER -c "workon $VIRTUAL_ENVIRONMENT_NAME"
+sudo su $OE_USER -c "pip install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt"
 #pip install python3 python3-pip python3-dev python3-venv python3-wheel python3-setuptools
 
 
