@@ -15,9 +15,9 @@
 # ./odoo-install
 ################################################################################
 
-OE_USER="odoo"
+OE_USER="debian"
 OE_HOME="/home/$OE_USER"
-OE_HOME_EXT="/$OE_HOME/${OE_USER}-server"
+OE_HOME_EXT="/$OE_HOME/odoo/${OE_USER}-server"
 
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
 
@@ -103,9 +103,9 @@ echo -e "\n---- Create ODOO system user ----"
 # About the gecos option:
 # What do the `--disabled-login` and `--gecos` options of `adduser` command stand for?
 # https://askubuntu.com/questions/420784/what-do-the-disabled-login-and-gecos-options-of-adduser-command-stand
-sudo adduser --system --quiet --shell=/bin/bash --home=$OE_HOME --gecos 'ODOO admin' --group $OE_USER
+#sudo adduser --system --quiet --shell=/bin/bash --home=$OE_HOME --gecos 'ODOO admin' --group $OE_USER
 #The user should also be added to the sudo'ers group.
-sudo adduser $OE_USER sudo
+#sudo adduser $OE_USER sudo
 
 sudo cd $OE_HOME
 sudo su $OE_USER -c "mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
@@ -127,11 +127,11 @@ sudo chown $OE_USER:$OE_USER /var/log/$OE_USER
 # Install ODOO
 #--------------------------------------------------
 echo -e "\n==== Installing ODOO Server ===="
-sudo git clone --depth 1 --branch $OE_VERSION https://www.github.com/odoo/odoo $OE_HOME_EXT/
+sudo git clone --depth 1 --branch $OE_VERSION https://www.github.com/odoo/odoo $OE_HOME_EXT
 
 echo -e "\n---- Create custom module directory ----"
-sudo su $OE_USER -c "mkdir $OE_HOME/custom"
-sudo su $OE_USER -c "mkdir $OE_HOME/custom/addons"
+sudo su $OE_USER -c "mkdir $OE_HOME/odoo/custom"
+sudo su $OE_USER -c "mkdir $OE_HOME/odoo/custom/addons"
 
 echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
@@ -162,4 +162,3 @@ echo -e "* Create startup file"
 sudo su root -c "echo '#!/bin/bash' >> $OE_HOME_EXT/start.sh"
 sudo su root -c "echo 'sudo -u $OE_USER $OE_HOME_EXT/odoo-bin --config=${OE_CONFIG}' >> $OE_HOME_EXT/start.sh"
 sudo chmod 755 $OE_HOME_EXT/start.sh
-
