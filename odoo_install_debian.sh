@@ -154,7 +154,7 @@ sudo su root -c "printf 'logfile = /var/log/${OE_USER}/${OE_CONFIG}.log\n' >> /e
 
 sudo su root -c "printf 'addons_path=${OE_HOME_EXT}/addons,${OE_HOME}/custom/addons\n' >> /etc/${OE_CONFIG}.conf"
 
-sudo chown $OE_USER:$OE_USER /etc/${OE_CONFIG}.conf
+sudo chown $OE_USER:$OE_USER ${OE_CONFIG}
 sudo chmod 640 ${OE_CONFIG}
 
 echo -e "* Create startup file"
