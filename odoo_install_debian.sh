@@ -107,8 +107,8 @@ echo -e "\n---- Create ODOO system user ----"
 #The user should also be added to the sudo'ers group.
 #sudo adduser $OE_USER sudo
 
-sudo cd $OE_HOME
-sudo su $OE_USER -c "mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
+sudo su $OE_USER -c "cd $OE_HOME"
+sudo su $OE_USER s-c "source ${OE_HOME}/.bashrc;mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
 
 echo -e "\n---- Install python packages/requirements ----"
 # Is not adviced to use sudo with pip to alter system packages. See:
