@@ -35,7 +35,7 @@ INSTALL_NODEJS="False"
 # If you want to install virtualenv and virtualenvwrapper please follow this link:
 # Virtualenv with Virtualenvwrapper on Ubuntu 18.04
 # https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5
-INSTALL VIRTUALENVWRAPPER="False"
+INSTALL_VIRTUALENVWRAPPER="False"
 
 # Be sure of versión of python3 >= 3.7
 # If you have a python versión < 3.7, then follow this link:
