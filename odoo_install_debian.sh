@@ -17,7 +17,7 @@
 
 OE_USER="debian"
 OE_HOME="/home/$OE_USER"
-OE_HOME_EXT="/$OE_HOME/odoo/${OE_USER}-server"
+OE_HOME_EXT="$OE_HOME/odoo/odoo-server"
 
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
 
@@ -42,7 +42,7 @@ INSTALL_VIRTUALENVWRAPPER="False"
 # How to Install Python 3.7 on Debian 9
 # https://linuxize.com/post/how-to-install-python-3-7-on-debian-9/
 PYTHON3=$(which python3)
-
+PYTHON3="/usr/local/bin/python3.7"
 VIRTUAL_ENVIRONMENT_NAME="odoo"
 
 # Set the default Odoo port (you still have to use -c /etc/odoo-server.conf for example to use this.)
@@ -76,14 +76,14 @@ LONGPOLLING_PORT="8072"
 # Update Server
 #--------------------------------------------------
 echo -e "\n---- Update Server ----"
-sudo apt-get update
-sudo apt-get upgrade -y
+#sudo apt-get update
+#sudo apt-get upgrade -y
 
 #--------------------------------------------------
 # Install PostgreSQL Server
 #--------------------------------------------------
 echo -e "\n---- Install PostgreSQL Server ----"
-sudo apt-get install postgresql -y
+#sudo apt-get install postgresql -y
 
 echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
 sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
@@ -92,12 +92,12 @@ sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
 # Install Dependencies
 #--------------------------------------------------
 echo -e "\n--- Installing Python 3 + pip3! --"
-sudo apt-get install git build-essential wget  libxslt1-dev -y
-sudo apt-get install libzip-dev libldap2-dev libsasl2-dev  node-less gdebi -y
+#sudo apt-get install git build-essential wget  libxslt1-dev -y
+#sudo apt-get install libzip-dev libldap2-dev libsasl2-dev  node-less gdebi -y
 
 
 echo -e "\n---- Installing rtlcss for LTR support ----"
-sudo npm install -g rtlcss
+#sudo npm install -g rtlcss
 
 echo -e "\n---- Create ODOO system user ----"
 # About the gecos option:
@@ -108,14 +108,15 @@ echo -e "\n---- Create ODOO system user ----"
 #sudo adduser $OE_USER sudo
 
 sudo su $OE_USER -c "cd $OE_HOME"
-sudo su $OE_USER s-c "source ${OE_HOME}/.bashrc;mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
-
+sudo -E -i  su $OE_USER -l -c "source ${OE_HOME}/.bashrc; mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
+echo "source ${OE_HOME}/.bashrc; mkvirtualenv --python $PYTHON3 $VIRTUAL_ENVIRONMENT_NAME"
 echo -e "\n---- Install python packages/requirements ----"
 # Is not adviced to use sudo with pip to alter system packages. See:
 # What are the risks of running 'sudo pip'?
 # https://stackoverflow.com/questions/21055859/what-are-the-risks-of-running-sudo-pip
-sudo su $OE_USER -c "workon $VIRTUAL_ENVIRONMENT_NAME"
-sudo su $OE_USER -c "pip install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt"
+sudo -E -i  su $OE_USER -l -c "source ${OE_HOME}/.bashrc; workon ${VIRTUAL_ENVIRONMENT_NAME};python -V;pip install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt"
+#sudo -E -i  su $OE_USER -l -c "python -V"
+#sudo -E -i  su $OE_USER -l -c "pip install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt"
 #pip install python3 python3-pip python3-dev python3-venv python3-wheel python3-setuptools
 
 
@@ -160,5 +161,5 @@ sudo chmod 640 ${OE_CONFIG}
 
 echo -e "* Create startup file"
 sudo su root -c "echo '#!/bin/bash' >> $OE_HOME_EXT/start.sh"
-sudo su root -c "echo 'sudo -u $OE_USER $OE_HOME_EXT/odoo-bin --config=${OE_CONFIG}' >> $OE_HOME_EXT/start.sh"
+sudo su root -c "echo 'workon ${VIRTUAL_ENVIRONMENT_NAME};sudo -u $OE_USER $OE_HOME_EXT/odoo-bin --config=${OE_CONFIG}' >> $OE_HOME_EXT/start.sh"
 sudo chmod 755 $OE_HOME_EXT/start.sh
