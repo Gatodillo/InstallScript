@@ -1,7 +1,18 @@
 #!/bin/bash
-# Basic Odoo install script
+# Basic Odoo install script. This script does not install Odoo enterprise!
 # Based in the work of https://github.com/Yenthe666/InstallScript/blob/14.0/odoo_install_debian.sh
 # and https://www.odoo.com/documentation/14.0/setup/install.html#id7 
+#
+# This scripts needs to be executed inside a virtual environment created with virtualenvwrapper.
+# Instruccions for install virtualenv and virtualenvwrapper on Debian 10 can be found at:
+# https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5
+# Odoo needs Python3 >= 3.6. Instructions to install Python 3.7 can be found at:
+# https://linuxize.com/post/how-to-install-python-3-7-on-debian-9/
+# As example: mkvirtualenv --python /usr/local/bin/python37 odoo
+# Then chmod +x ./odoo_install_debian.sh && ./odoo_install_debian.sh
+#
+# To install wkhtml2pdf check:
+# https://computingforgeeks.com/install-wkhtmltopdf-on-ubuntu-debian-linux/
 ################################################################################
 
 OE_USER="$(whoami)"
@@ -51,6 +62,7 @@ sudo git clone --depth 1 --branch $OE_VERSION https://www.github.com/odoo/odoo $
 
 #minimal option --database and --limit-time-real 100000
 #https://www.odoo.com/documentation/14.0/reference/cmdline.html#reference-cmdline-config
+/home/debian/odoo/odoo-server/odoo-bin --limit-time-real 100000 --database odoo
 
 
 # After first start:
@@ -59,3 +71,4 @@ sudo git clone --depth 1 --branch $OE_VERSION https://www.github.com/odoo/odoo $
 # Passsword: odoo-admin 
 # Create database (we don´t use the database created previously?)
 # eq4 / odoo-demo
+# Start odoo-bin with the new database -d-database demo (or your database name)
